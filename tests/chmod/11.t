@@ -9,7 +9,7 @@ dir=`dirname $0`
 if supported lchmod; then
 	echo "1..173"
 else
-	echo "1..109"
+	echo "1..21"
 fi
 
 n0=`namegen`

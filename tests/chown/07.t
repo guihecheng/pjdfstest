@@ -6,7 +6,7 @@ desc="chown returns EPERM if the operation would change the ownership, but the e
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..132"
+echo "1..33"
 
 n0=`namegen`
 n1=`namegen`

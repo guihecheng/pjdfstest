@@ -6,7 +6,7 @@ desc="mkdir returns EEXIST if the named file exists"
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..21"
+echo "1..6"
 
 n0=`namegen`
 

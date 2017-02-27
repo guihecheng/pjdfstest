@@ -6,7 +6,7 @@ desc="rmdir returns EEXIST or ENOTEMPTY the named directory contains files other
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..23"
+echo "1..8"
 
 n0=`namegen`
 n1=`namegen`

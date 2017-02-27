@@ -6,7 +6,7 @@ desc="chown returns ENOENT if the named file does not exist"
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..9"
+echo "1..6"
 
 n0=`namegen`
 n1=`namegen`

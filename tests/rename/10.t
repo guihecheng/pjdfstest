@@ -6,7 +6,7 @@ desc="rename returns EACCES or EPERM if the file pointed at by the 'to' argument
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..2099"
+echo "1..139"
 
 n0=`namegen`
 n1=`namegen`

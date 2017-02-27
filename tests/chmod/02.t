@@ -6,7 +6,7 @@ desc="chmod returns ENAMETOOLONG if a component of a pathname exceeded {NAME_MAX
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..10"
+echo "1..5"
 
 nx=`namegen_max`
 nxx="${nx}x"

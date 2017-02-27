@@ -6,7 +6,7 @@ desc="rename returns ENOTDIR if a component of either path prefix is not a direc
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..32"
+echo "1..8"
 
 n0=`namegen`
 n1=`namegen`
