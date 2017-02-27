@@ -20,15 +20,11 @@ expect 0 mkdir ${n0} 0755
 cdir=`pwd`
 cd ${n0}
 
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	if [ "${type}" != "symlink" ]; then
 		create_file ${type} ${n1}
 		expect 0 chmod ${n1} 01621
 		expect 01621 stat ${n1} mode
-		expect 0 symlink ${n1} ${n2}
-		expect 0 chmod ${n2} 01700
-		expect 01700 stat ${n1} mode
-		expect 0 unlink ${n2}
 		if [ "${type}" = "dir" ]; then
 			expect 0 rmdir ${n1}
 		else
@@ -52,37 +48,25 @@ expect 0 mkdir ${n1} 0755
 expect 0 chown ${n1} 65534 65534
 expect 0 -u 65534 -g 65534 chmod ${n1} 01755
 expect 01755 stat ${n1} mode
-expect 0 symlink ${n1} ${n2}
-expect 0 chmod ${n2} 01700
-expect 01700 stat ${n1} mode
-expect 0 unlink ${n2}
 expect 0 rmdir ${n1}
 
-for type in regular fifo block char socket symlink; do
+for type in regular; do
 	if [ "${type}" != "symlink" ]; then
 		create_file ${type} ${n1} 0640 65534 65534
-		expect 0 symlink ${n1} ${n2}
 		case "${os}" in
 		FreeBSD)
 			expect EFTYPE -u 65534 -g 65534 chmod ${n1} 01644
-			expect 0640 stat ${n1} mode
-			expect EFTYPE -u 65534 -g 65534 chmod ${n2} 01644
 			expect 0640 stat ${n1} mode
 			;;
 		SunOS)
 			expect 0 -u 65534 -g 65534 chmod ${n1} 01644
 			expect 0644 stat ${n1} mode
-			expect 0 -u 65534 -g 65534 chmod ${n2} 01640
-			expect 0640 stat ${n1} mode
 			;;
 		Linux)
 			expect 0 -u 65534 -g 65534 chmod ${n1} 01644
 			expect 01644 stat ${n1} mode
-			expect 0 -u 65534 -g 65534 chmod ${n2} 01640
-			expect 01640 stat ${n1} mode
 			;;
 		esac
-		expect 0 unlink ${n2}
 		if [ "${type}" = "dir" ]; then
 			expect 0 rmdir ${n1}
 		else

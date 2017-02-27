@@ -17,8 +17,10 @@ expect 0620 stat ${nx} mode
 expect 0 unlink ${nx}
 expect ENAMETOOLONG chmod ${nxx} 0620
 
-expect 0 create ${nx} 0644
-expect 0 lchmod ${nx} 0620
-expect 0620 stat ${nx} mode
-expect 0 unlink ${nx}
-expect ENAMETOOLONG lchmod ${nxx} 0620
+if supported lchmod; then
+	expect 0 create ${nx} 0644
+	expect 0 lchmod ${nx} 0620
+	expect 0620 stat ${nx} mode
+	expect 0 unlink ${nx}
+	expect ENAMETOOLONG lchmod ${nxx} 0620
+fi

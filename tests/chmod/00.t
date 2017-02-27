@@ -20,19 +20,11 @@ expect 0 mkdir ${n2} 0755
 cdir=`pwd`
 cd ${n2}
 
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	if [ "${type}" != "symlink" ]; then
 		create_file ${type} ${n0}
 		expect 0 chmod ${n0} 0111
 		expect 0111 stat ${n0} mode
-
-		expect 0 symlink ${n0} ${n1}
-		mode=`${fstest} lstat ${n1} mode`
-		expect 0 chmod ${n1} 0222
-		expect 0222 stat ${n1} mode
-		expect 0222 stat ${n0} mode
-		expect ${mode} lstat ${n1} mode
-		expect 0 unlink ${n1}
 
 		if [ "${type}" = "dir" ]; then
 			expect 0 rmdir ${n0}
@@ -54,7 +46,7 @@ for type in regular dir fifo block char socket symlink; do
 done
 
 # successful chmod(2) updates ctime.
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	if [ "${type}" != "symlink" ]; then
 		create_file ${type} ${n0}
 		ctime1=`${fstest} stat ${n0} ctime`
@@ -85,7 +77,7 @@ for type in regular dir fifo block char socket symlink; do
 done
 
 # unsuccessful chmod(2) does not update ctime.
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	if [ "${type}" != "symlink" ]; then
 		create_file ${type} ${n0}
 		ctime1=`${fstest} stat ${n0} ctime`
