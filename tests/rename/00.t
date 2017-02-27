@@ -17,7 +17,7 @@ expect 0 mkdir ${n3} 0755
 cdir=`pwd`
 cd ${n3}
 
-for type in regular fifo block char socket; do
+for type in regular; do
 	create_file ${type} ${n0} 0644
 	expect ${type},0644,1 lstat ${n0} type,mode,nlink
 	inode=`${fstest} lstat ${n0} inode`
@@ -46,19 +46,10 @@ expect 0 rmdir ${n1}
 expect 0 create ${n0} 0644
 rinode=`${fstest} lstat ${n0} inode`
 expect regular,0644 lstat ${n0} type,mode
-expect 0 symlink ${n0} ${n1}
-sinode=`${fstest} lstat ${n1} inode`
-expect regular,${rinode},0644 stat ${n1} type,inode,mode
-expect symlink,${sinode} lstat ${n1} type,inode
-expect 0 rename ${n1} ${n2}
-expect regular,${rinode},0644 stat ${n0} type,inode,mode
-expect ENOENT lstat ${n1} type,mode
-expect symlink,${sinode} lstat ${n2} type,inode
 expect 0 unlink ${n0}
-expect 0 unlink ${n2}
 
 # successful rename(2) updates ctime.
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	create_file ${type} ${n0}
 	ctime1=`${fstest} lstat ${n0} ctime`
 	sleep 1
@@ -73,7 +64,7 @@ for type in regular dir fifo block char socket symlink; do
 done
 
 # unsuccessful link(2) does not update ctime.
-for type in regular dir fifo block char socket symlink; do
+for type in regular dir; do
 	create_file ${type} ${n0}
 	ctime1=`${fstest} lstat ${n0} ctime`
 	sleep 1
