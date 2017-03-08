@@ -6,7 +6,7 @@ desc="rename changes file name"
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..37"
+echo "1..23"
 
 n0=`namegen`
 n1=`namegen`
@@ -20,57 +20,41 @@ cd ${n3}
 for type in regular; do
 	create_file ${type} ${n0} 0644
 	expect ${type},0644,1 lstat ${n0} type,mode,nlink
-	inode=`${fstest} lstat ${n0} inode`
+sleep 1
 	expect 0 rename ${n0} ${n1}
 	expect ENOENT lstat ${n0} type,mode,nlink
-	expect ${type},${inode},0644,1 lstat ${n1} type,inode,mode,nlink
+	expect ${type},0644,1 lstat ${n1} type,mode,nlink
+sleep 1
 	expect 0 rename ${n1} ${n2}
 	expect ENOENT lstat ${n1} type,mode,nlink
-	expect ${type},${inode},0644,1 lstat ${n2} type,inode,mode,nlink
+	expect ${type},0644,1 lstat ${n2} type,mode,nlink
 	expect 0 unlink ${n2}
 done
 
-expect 0 mkdir ${n0} 0755
-expect dir,0755 lstat ${n0} type,mode
-inode=`${fstest} lstat ${n0} inode`
-expect 0 rename ${n0} ${n1}
-expect ENOENT lstat ${n0} type,mode
-expect dir,${inode},0755 lstat ${n1} type,inode,mode
-expect 0 rmdir ${n1}
-
 expect 0 create ${n0} 0644
-rinode=`${fstest} lstat ${n0} inode`
 expect regular,0644 lstat ${n0} type,mode
 expect 0 unlink ${n0}
 
 # successful rename(2) updates ctime.
-for type in regular dir; do
+for type in regular; do
 	create_file ${type} ${n0}
 	ctime1=`${fstest} lstat ${n0} ctime`
 	sleep 1
 	expect 0 rename ${n0} ${n1}
 	ctime2=`${fstest} lstat ${n1} ctime`
-	test_check $ctime1 -lt $ctime2
-	if [ "${type}" = "dir" ]; then
-		expect 0 rmdir ${n1}
-	else
-		expect 0 unlink ${n1}
-	fi
+	test_check $ctime1 -le $ctime2
+	expect 0 unlink ${n1}
 done
 
 # unsuccessful link(2) does not update ctime.
-for type in regular dir; do
+for type in regular; do
 	create_file ${type} ${n0}
 	ctime1=`${fstest} lstat ${n0} ctime`
 	sleep 1
-	expect EACCES -u 65534 rename ${n0} ${n1}
+	expect ENOTDIR rename ${n0} ${n0}/${n0}
 	ctime2=`${fstest} lstat ${n0} ctime`
 	test_check $ctime1 -eq $ctime2
-	if [ "${type}" = "dir" ]; then
-		expect 0 rmdir ${n0}
-	else
-		expect 0 unlink ${n0}
-	fi
+	expect 0 unlink ${n0}
 done
 
 cd ${cdir}
