@@ -6,7 +6,7 @@ desc="open opens (and eventually creates) a file"
 dir=`dirname $0`
 . ${dir}/../misc.sh
 
-echo "1..47"
+echo "1..41"
 
 n0=`namegen`
 n1=`namegen`
@@ -82,18 +82,18 @@ ctime=`${fstest} stat . ctime`
 test_check $dctime -eq $ctime
 expect 0 unlink ${n0}
 
-echo test > ${n0}
-expect 5 stat ${n0} size
-mtime1=`${fstest} stat ${n0} mtime`
-ctime1=`${fstest} stat ${n0} ctime`
-sleep 1
-expect 0 open ${n0} O_WRONLY,O_TRUNC
-mtime2=`${fstest} stat ${n0} mtime`
-test_check $mtime1 -lt $mtime2
-ctime2=`${fstest} stat ${n0} ctime`
-test_check $ctime1 -lt $ctime2
-expect 0 stat ${n0} size
-expect 0 unlink ${n0}
+#echo test > ${n0}
+#expect 5 stat ${n0} size
+#mtime1=`${fstest} stat ${n0} mtime`
+#ctime1=`${fstest} stat ${n0} ctime`
+#sleep 1
+#expect 0 open ${n0} O_WRONLY,O_TRUNC
+#mtime2=`${fstest} stat ${n0} mtime`
+#test_check $mtime1 -lt $mtime2
+#ctime2=`${fstest} stat ${n0} ctime`
+#test_check $ctime1 -lt $ctime2
+#expect 0 stat ${n0} size
+#expect 0 unlink ${n0}
 
 cd ${cdir}
 expect 0 rmdir ${n1}
